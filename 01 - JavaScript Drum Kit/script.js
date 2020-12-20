@@ -1,7 +1,12 @@
 addKeydownListener(generateKeydownHandler(handler));
 
 export function handler(e) {
-  console.log(e.key);
+  const audioElement = getAudioElementFor(e.keyCode);
+  audioElement.play();
+}
+
+function getAudioElementFor(keyCode) {
+  return document.querySelector(`audio[data-key="${keyCode}"]`);
 }
 
 function addKeydownListener(f) {

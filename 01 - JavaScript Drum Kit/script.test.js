@@ -45,6 +45,15 @@ describe(createHandler.name, () => {
     handler(event);
     expect(keyElement.classList).toEqual(new Set(['playing']));
   });
+
+  test('caches retrieved elements', () => {
+    handler(event);
+    handler(event);
+    handler(event);
+    handler(event);
+    handler(event);
+    expect(callsTo(document.querySelector)).toBe(2);
+  });
 });
 
 describe(generateKeydownHandler.name, () => {

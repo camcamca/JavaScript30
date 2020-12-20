@@ -1,4 +1,23 @@
+addEventListeners();
 addKeydownListener(generateKeydownHandler(createHandler()));
+
+export function addEventListeners(eventHandler = handleTransitionEnd) {
+  getAllKeyElements().forEach((keyElement) =>
+    keyElement.addEventListener('transitionend', eventHandler),
+  );
+
+  function getAllKeyElements() {
+    return document.querySelectorAll('.key');
+  }
+}
+
+export function handleTransitionEnd(e) {
+  if (e.propertyName !== 'transform') {
+    return;
+  }
+
+  this.classList.remove('playing');
+}
 
 export function createHandler() {
   function handler(e) {

@@ -1,15 +1,15 @@
 import { handler, generateKeydownHandler } from './script.js';
 import { jest } from '@jest/globals';
 
-describe(`handle`, () => {
+describe(handler.name, () => {
   test('logs to console', () => {
     console.log = jest.fn();
-    handler({ key: "doesn't matter" });
-    expect(console.log.mock.calls.length).toBe(1);
+    handler({ key: 'some event key' });
+    expect(callsTo(console.log)).toBe(1);
   });
 });
 
-describe('keydownHandler', () => {
+describe(generateKeydownHandler.name, () => {
   let mockHandler;
   let sut;
   beforeEach(() => {
@@ -17,7 +17,7 @@ describe('keydownHandler', () => {
     sut = generateKeydownHandler(mockHandler);
   });
 
-  describe(`should listen for keys`, () => {
+  describe('should listen for keys', () => {
     const supportedKeys = ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'];
 
     supportedKeys.forEach((key) => {
@@ -28,7 +28,7 @@ describe('keydownHandler', () => {
     });
   });
 
-  describe(`should not listen for keys`, () => {
+  describe('should not listen for keys', () => {
     const unsupportedKeys = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'];
 
     unsupportedKeys.forEach((key) => {

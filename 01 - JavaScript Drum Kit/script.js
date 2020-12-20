@@ -1,25 +1,32 @@
-addEventListeners();
-addKeydownListener(generateKeydownHandler(createHandler()));
+addTransitionEndEventListeners();
+addKeydownListener(createKeydownPreHandler(createKeydownHandler()));
 
-export function addEventListeners(eventHandler = handleTransitionEnd) {
-  getAllKeyElements().forEach((keyElement) =>
-    keyElement.addEventListener('transitionend', eventHandler),
-  );
+export function addTransitionEndEventListeners(
+  eventHandler = handleTransitionEndEvent,
+) {
+  getAllKeyElements().forEach((keyElement) => addEventListenerTo(keyElement));
+
+  function addEventListenerTo(keyElement) {
+    return keyElement.addEventListener('transitionend', eventHandler);
+  }
 
   function getAllKeyElements() {
     return document.querySelectorAll('.key');
   }
 }
 
-export function handleTransitionEnd(e) {
-  if (e.propertyName !== 'transform') {
+export function handleTransitionEndEvent(e) {
+  if (isNotTransformEvent()) {
     return;
   }
-
   this.classList.remove('playing');
+
+  function isNotTransformEvent() {
+    return e.propertyName !== 'transform';
+  }
 }
 
-export function createHandler() {
+export function createKeydownHandler() {
   function handler(e) {
     playAudio();
     styleKey();
@@ -63,11 +70,11 @@ export function createHandler() {
   return handler;
 }
 
-function addKeydownListener(f) {
-  document.addEventListener('keydown', f);
+function addKeydownListener(keydownHandler) {
+  document.addEventListener('keydown', keydownHandler);
 }
 
-export function generateKeydownHandler(handler) {
+export function createKeydownPreHandler(handler) {
   const supportedKeyCodes = [
     '65',
     '83',
